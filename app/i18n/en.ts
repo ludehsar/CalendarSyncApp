@@ -10,6 +10,8 @@ const en = {
     calendar: "Calendar",
     newYork: "New York",
     uk: "United Kingdom",
+    todaysTasks: "Todays Tasks",
+    reminders: "Reminders",
   },
   welcomeScreen: {
     postscript:

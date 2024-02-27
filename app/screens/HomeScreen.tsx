@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { AppStackScreenProps } from "app/navigators"
-import { Button, Screen, Text } from "app/components"
+import { Button, Screen, TaskCard, Text } from "app/components"
 import { colors, typography } from "app/theme"
 import { daysOfWeek, months } from "app/utils/constants"
 
@@ -76,18 +76,25 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
           </View>
         </View>
       </View>
+      <View style={$todaysTasksContainer}>
+        <View style={$todaysTasksTitleContainer}>
+          <Text style={$todaysTasksTitle} preset="bold" tx="homeScreen.todaysTasks" />
+          <Text style={$reminder} tx="homeScreen.reminders" />
+        </View>
+        <TaskCard />
+      </View>
     </Screen>
   )
 })
 
 const $root: ViewStyle = {
   flex: 1,
-  margin: 8,
 }
 
 const $title: TextStyle = {
-  marginTop: 52,
+  marginTop: 60,
   marginBottom: 20,
+  marginHorizontal: 8,
   fontFamily: typography.secondary?.medium,
   fontSize: 42,
   letterSpacing: 1.2,
@@ -97,6 +104,7 @@ const $buttonContainer: ViewStyle = {
   flexDirection: "row",
   gap: 16,
   marginBottom: 28,
+  marginHorizontal: 8,
 }
 
 const $button: ViewStyle = {
@@ -105,7 +113,7 @@ const $button: ViewStyle = {
 }
 
 const $buttonText: TextStyle = {
-  fontFamily: typography.primary.medium,
+  fontFamily: typography.secondary?.medium,
 }
 
 const $todayButton: ViewStyle = {
@@ -144,12 +152,14 @@ const $dayOfWeek: TextStyle = {
   fontSize: 24,
   fontWeight: "500",
   fontFamily: typography.secondary?.medium,
+  marginHorizontal: 8,
 }
 
 const $timeContainer: ViewStyle = {
   flexDirection: "row",
   gap: 24,
-  // marginVertical: 16,
+  marginHorizontal: 8,
+  marginBottom: 24,
   alignItems: "center",
 }
 
@@ -189,4 +199,37 @@ const $otherTime: TextStyle = {
 const $otherTimeLabel: TextStyle = {
   fontSize: 18,
   fontFamily: typography.secondary?.medium,
+}
+
+const $todaysTasksContainer: ViewStyle = {
+  backgroundColor: colors.palette.neutral100,
+  flex: 1,
+  borderWidth: 0.3,
+  borderColor: colors.border,
+  borderTopLeftRadius: 62,
+  borderTopRightRadius: 62,
+}
+
+const $todaysTasksTitleContainer: ViewStyle = {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 8,
+  marginHorizontal: 24,
+  marginVertical: 40,
+}
+
+const $todaysTasksTitle: TextStyle = {
+  fontSize: 22,
+  fontFamily: typography.secondary?.medium,
+}
+
+const $reminder: TextStyle = {
+  paddingHorizontal: 20,
+  paddingVertical: 4,
+  borderWidth: 1,
+  borderColor: colors.border,
+  borderRadius: 62,
+  color: colors.palette.neutral900,
+  fontSize: 14,
 }

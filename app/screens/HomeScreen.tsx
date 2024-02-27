@@ -96,7 +96,7 @@ const $title: TextStyle = {
 const $buttonContainer: ViewStyle = {
   flexDirection: "row",
   gap: 16,
-  marginBottom: 16,
+  marginBottom: 28,
 }
 
 const $button: ViewStyle = {
@@ -141,7 +141,7 @@ const $calendarButtonText: TextStyle = {
 }
 
 const $dayOfWeek: TextStyle = {
-  fontSize: 18,
+  fontSize: 24,
   fontWeight: "500",
   fontFamily: typography.secondary?.medium,
 }

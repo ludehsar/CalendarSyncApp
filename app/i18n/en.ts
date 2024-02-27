@@ -1,8 +1,15 @@
 const en = {
   common: {
+    logo: "CalSync",
     ok: "OK!",
     cancel: "Cancel",
     back: "Back",
+  },
+  homeScreen: {
+    today: "Today",
+    calendar: "Calendar",
+    newYork: "New York",
+    uk: "United Kingdom",
   },
   welcomeScreen: {
     postscript:

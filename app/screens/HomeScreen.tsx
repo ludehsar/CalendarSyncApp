@@ -1,26 +1,80 @@
-import React, { FC } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { AppStackScreenProps } from "app/navigators"
 import { Button, Screen, Text } from "app/components"
 import { colors, typography } from "app/theme"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "app/models"
+import { daysOfWeek, months } from "app/utils/constants"
 
 interface HomeScreenProps extends AppStackScreenProps<"Home"> {}
 
 export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+  const [currentDate, setCurrentDate] = useState<Date>(new Date())
+  const requestRef = useRef<number>()
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
+  const animate = () => {
+    setCurrentDate(new Date())
+    requestRef.current = requestAnimationFrame(animate)
+  }
+
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(requestRef.current || Number())
+  }, [])
+
   return (
     <Screen preset="scroll" contentContainerStyle={$root}>
-      <Text text="Cal Sync" style={$title} preset="bold" />
+      <Text tx="common.logo" style={$title} preset="heading" />
       <View style={$buttonContainer}>
-        <Button preset="default" style={$todayButton} textStyle={$todayButtonText} pressedStyle={$todayButtonPressed}>Today</Button>
-        <Button preset="default" style={$calendarButton} textStyle={$calendarButtonText} pressedStyle={$calendarButtonPressed}>Calendar</Button>
+        <Button
+          preset="default"
+          style={$todayButton}
+          textStyle={$todayButtonText}
+          pressedStyle={$todayButtonPressed}
+          tx="homeScreen.today"
+        />
+        <Button
+          preset="default"
+          style={$calendarButton}
+          textStyle={$calendarButtonText}
+          pressedStyle={$calendarButtonPressed}
+          tx="homeScreen.calendar"
+        />
+      </View>
+      <Text style={$dayOfWeek} preset="formLabel">
+        {daysOfWeek[currentDate.getDay()]}
+      </Text>
+      <View style={$timeContainer}>
+        <View style={$localTimeContainer}>
+          <Text style={$time} preset="heading">
+            {currentDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+          </Text>
+          <Text style={$month} preset="subheading">
+            {months[currentDate.getMonth()]}
+          </Text>
+        </View>
+        <View style={$otherTimeContainer}>
+          <View>
+            <Text style={$otherTime} preset="bold">
+              {currentDate.toLocaleTimeString("en-US", {
+                timeZone: "America/New_York",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </Text>
+            <Text style={$otherTimeLabel} preset="formHelper" tx="homeScreen.newYork" />
+          </View>
+          <View>
+            <Text style={$otherTime} preset="bold">
+              {currentDate.toLocaleTimeString("en-US", {
+                timeZone: "Europe/London",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </Text>
+            <Text style={$otherTimeLabel} preset="formHelper" tx="homeScreen.uk" />
+          </View>
+        </View>
       </View>
     </Screen>
   )
@@ -28,20 +82,21 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
 
 const $root: ViewStyle = {
   flex: 1,
-  margin: 8
+  margin: 8,
 }
 
 const $title: TextStyle = {
-  marginTop: 40,
+  marginTop: 52,
+  marginBottom: 20,
   fontFamily: typography.secondary?.medium,
   fontSize: 42,
-  letterSpacing: 1.6,
-  lineHeight: 96,
+  letterSpacing: 1.2,
 }
 
 const $buttonContainer: ViewStyle = {
-  flexDirection: 'row',
-  gap: 16
+  flexDirection: "row",
+  gap: 16,
+  marginBottom: 16,
 }
 
 const $button: ViewStyle = {
@@ -50,7 +105,7 @@ const $button: ViewStyle = {
 }
 
 const $buttonText: TextStyle = {
-  fontFamily: typography.primary.medium
+  fontFamily: typography.primary.medium,
 }
 
 const $todayButton: ViewStyle = {
@@ -83,4 +138,55 @@ const $calendarButtonPressed: ViewStyle = {
 const $calendarButtonText: TextStyle = {
   ...$buttonText,
   color: colors.palette.neutral900,
+}
+
+const $dayOfWeek: TextStyle = {
+  fontSize: 18,
+  fontWeight: "500",
+  fontFamily: typography.secondary?.medium,
+}
+
+const $timeContainer: ViewStyle = {
+  flexDirection: "row",
+  gap: 24,
+  // marginVertical: 16,
+  alignItems: "center",
+}
+
+const $localTimeContainer: ViewStyle = {
+  borderRightWidth: 0.7,
+  paddingRight: 22,
+  paddingVertical: 8,
+}
+
+const $time: TextStyle = {
+  fontSize: 84,
+  fontWeight: "700",
+  fontFamily: typography.secondary?.medium,
+  letterSpacing: 1.2,
+  lineHeight: 120,
+}
+
+const $month: TextStyle = {
+  fontSize: 84,
+  fontWeight: "500",
+  fontFamily: typography.secondary?.medium,
+  letterSpacing: 1.2,
+  lineHeight: 80,
+}
+
+const $otherTimeContainer: ViewStyle = {
+  gap: 24,
+}
+
+const $otherTime: TextStyle = {
+  fontSize: 32,
+  fontWeight: "500",
+  fontFamily: typography.secondary?.medium,
+  lineHeight: 32,
+}
+
+const $otherTimeLabel: TextStyle = {
+  fontSize: 18,
+  fontFamily: typography.secondary?.medium,
 }
